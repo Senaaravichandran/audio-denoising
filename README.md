@@ -111,6 +111,7 @@ SonicPurge is a cutting-edge audio enhancement system powered by **Deep Complex 
 - **Python 3.8+** - [Download Python](https://www.python.org/downloads/)
 - **Node.js 18+** - [Download Node.js](https://nodejs.org/)
 - **FFmpeg** (Optional) - [Download FFmpeg](https://ffmpeg.org/download.html) for video processing
+- To get the dataset of clean and noisy data, downlaod the data from https://datashare.ed.ac.uk/handle/10283/2791 and create a folder named data in the project folder and then inside the project folder, create two folder named (clean,noisy) and then transfer all the data (.wav) files into it.
 
 ### 🚀 One-Click Installation & Launch
 
@@ -1052,7 +1053,7 @@ npm install && pip install -r ml/requirements.txt
 
 **Transform any audio into broadcast quality with the power of AI.**
 
-Built with ❤️ by [Senaa Ravichandran](https://github.com/Senaaravichandran) and the open-source community.
+Built with ❤️ by [Senaaravichandran A](https://github.com/Senaaravichandran) and the open-source community.
 
 **Repository**: [https://github.com/Senaaravichandran/audio-denoising](https://github.com/Senaaravichandran/audio-denoising)
 
