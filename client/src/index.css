@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(222, 84%, 5%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 20%, 8%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(222, 20%, 8%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(151, 100%, 45%);
+  --primary-foreground: hsl(180, 100%, 12%);
+  --secondary: hsl(180, 100%, 12%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --accent: hsl(199, 89%, 48%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62%, 30%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17%);
+  --input: hsl(217, 32%, 17%);
+  --ring: hsl(151, 100%, 45%);
+  --chart-1: hsl(151, 100%, 45%);
+  --chart-2: hsl(199, 89%, 48%);
+  --chart-3: hsl(284, 100%, 45%);
+  --chart-4: hsl(45, 100%, 51%);
+  --chart-5: hsl(343, 82%, 59%);
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --radius: 0.75rem;
+  --neon-green: hsl(151, 100%, 45%);
+  --dark-teal: hsl(180, 100%, 12%);
+  --electric-blue: hsl(199, 89%, 48%);
+  --glass-bg: hsla(210, 40%, 98%, 0.08);
+}
+
+.dark {
+  --background: hsl(222, 84%, 5%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 20%, 8%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(222, 20%, 8%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(151, 100%, 45%);
+  --primary-foreground: hsl(180, 100%, 12%);
+  --secondary: hsl(180, 100%, 12%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --accent: hsl(199, 89%, 48%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62%, 30%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17%);
+  --input: hsl(217, 32%, 17%);
+  --ring: hsl(151, 100%, 45%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background: linear-gradient(135deg, hsl(222, 84%, 5%) 0%, hsl(217, 32%, 17%) 50%, hsl(222, 84%, 5%) 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid hsla(151, 100%, 45%, 0.2);
+  }
+  
+  .neon-green {
+    color: var(--neon-green);
+  }
+  
+  .dark-teal {
+    color: var(--dark-teal);
+  }
+  
+  .electric-blue {
+    color: var(--electric-blue);
+  }
+  
+  .bg-neon-green {
+    background-color: var(--neon-green);
+  }
+  
+  .bg-dark-teal {
+    background-color: var(--dark-teal);
+  }
+  
+  .bg-electric-blue {
+    background-color: var(--electric-blue);
+  }
+  
+  .border-neon-green {
+    border-color: var(--neon-green);
+  }
+  
+  .text-neon-green {
+    color: var(--neon-green);
+  }
+  
+  .text-dark-teal {
+    color: var(--dark-teal);
+  }
+  
+  .text-electric-blue {
+    color: var(--electric-blue);
+  }
+  
+  .ai-gradient {
+    background: linear-gradient(135deg, hsl(222, 84%, 5%) 0%, hsl(217, 32%, 17%) 50%, hsl(222, 84%, 5%) 100%);
+  }
+  
+  .waveform-bar {
+    animation: wave 1.5s ease-in-out infinite;
+  }
+  
+  .spectrum-bar {
+    animation: spectrum 3s ease-in-out infinite;
+  }
+  
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+}
+
+@layer utilities {
+  .bg-ai-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 80%, hsla(151, 100%, 45%, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsla(199, 89%, 48%, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, hsla(284, 100%, 45%, 0.05) 0%, transparent 50%);
+  }
+}
+
+@keyframes wave {
+  0%, 100% { 
+    transform: scaleY(1); 
+  }
+  50% { 
+    transform: scaleY(1.5); 
+  }
+}
+
+@keyframes spectrum {
+  0%, 100% { 
+    transform: scaleY(0.3); 
+  }
+  50% { 
+    transform: scaleY(1); 
+  }
+}
+
+@keyframes pulse-glow {
+  0% { 
+    box-shadow: 0 0 20px hsla(151, 100%, 45%, 0.4); 
+  }
+  100% { 
+    box-shadow: 0 0 40px hsla(151, 100%, 45%, 0.8); 
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(217, 32%, 17%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neon-green);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsla(151, 100%, 45%, 0.8);
+}
+
+/* File upload drag and drop styles */
+.upload-zone {
+  transition: all 0.3s ease;
+}
+
+.upload-zone.drag-over {
+  border-color: var(--neon-green);
+  background-color: hsla(151, 100%, 45%, 0.1);
+}
+
+/* Progress bar styles */
+.progress-bar {
+  background: linear-gradient(90deg, var(--neon-green) 0%, var(--electric-blue) 100%);
+}
+
+/* Button hover effects */
+.btn-primary {
+  background: var(--neon-green);
+  color: var(--dark-teal);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: hsla(151, 100%, 45%, 0.9);
+  box-shadow: 0 0 20px hsla(151, 100%, 45%, 0.5);
+}
+
+.btn-secondary {
+  background: var(--dark-teal);
+  border: 1px solid var(--neon-green);
+  color: var(--foreground);
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: hsla(180, 100%, 12%, 0.8);
+  box-shadow: 0 0 15px hsla(151, 100%, 45%, 0.3);
+}
+
+/* Audio visualization effects */
+.audio-viz {
+  position: relative;
+  overflow: hidden;
+}
+
+.audio-viz::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, hsla(151, 100%, 45%, 0.3), transparent);
+  animation: scan 2s linear infinite;
+}
+
+@keyframes scan {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Background image styles */
+.bg-neural-network {
+  background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.bg-audio-waves {
+  background-image: url('https://images.unsplash.com/photo-1611532736597-de2d4265fba3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=800');
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-studio-equipment {
+  background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=600');
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-frequency-spectrum {
+  background-image: url('https://images.unsplash.com/photo-1614728263952-84ea256f9679?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=800');
+  background-size: cover;
+  background-position: center;
+}

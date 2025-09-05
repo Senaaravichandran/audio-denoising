@@ -1,0 +1,95 @@
+# DCCRN Training Configuration
+
+# Model parameters
+model:
+  n_fft: 512
+  hop_length: 256
+  win_length: 512
+  encoder_layers: 5
+  hidden_dim: 128
+  lstm_layers: 2
+  use_clstm: true
+  kernel_size: [5, 2]
+  stride: [2, 1]
+  use_cbn: true
+  masking_mode: 'E'  # 'E' for magnitude estimation, 'C' for complex mask, 'R' for real mask
+  causal: false
+
+# Data configuration
+data:
+  clean_train_dir: "../../data/clean"
+  noisy_train_dir: "../../data/noisy"
+  clean_val_dir: "../../data/clean"  # Use same for validation (will be split)
+  noisy_val_dir: "../../data/noisy"  # Use same for validation (will be split)
+  batch_size: 8
+  num_workers: 4
+  segment_length: 32000  # 2 seconds at 16kHz
+  
+  # Audio processor settings
+  processor:
+    n_fft: 512
+    hop_length: 256
+    win_length: 512
+    window: 'hann'
+    sample_rate: 16000
+    normalize: true
+  
+  # Dataset settings
+  dataset_kwargs:
+    overlap: 0.5
+    cache_spectrograms: false
+    min_snr: -10.0
+    max_snr: 10.0
+
+# Loss function configuration
+loss:
+  si_sdr_weight: 1.0
+  complex_mse_weight: 0.5
+  spectral_weight: 0.1
+  perceptual_weight: 0.1
+  
+  # Complex MSE loss settings
+  complex_mse:
+    real_weight: 1.0
+    imag_weight: 1.0
+    magnitude_weight: 0.3
+    phase_weight: 0.1
+  
+  # Spectral loss settings
+  spectral:
+    fft_sizes: [512, 1024, 2048]
+    magnitude_weight: 1.0
+    log_magnitude_weight: 1.0
+  
+  # Perceptual loss settings
+  perceptual:
+    sample_rate: 16000
+    n_fft: 1024
+    hop_length: 256
+    n_mels: 80
+
+# Optimizer configuration
+optimizer:
+  type: 'adamw'
+  lr: 0.001
+  betas: [0.9, 0.999]
+  weight_decay: 0.01
+  
+  # Learning rate scheduler
+  scheduler:
+    type: 'cosine'  # 'cosine', 'step', 'plateau'
+    T_max: 200
+    eta_min: 0.00001
+
+# Training configuration
+training:
+  epochs: 200
+  log_interval: 100
+  save_interval: 10
+  grad_clip: 5.0
+  checkpoint_dir: "../../checkpoints"
+  log_dir: "../../logs"
+
+# Validation configuration
+validation:
+  metrics: ['si_sdr', 'pesq', 'stoi']  # Metrics to compute during validation

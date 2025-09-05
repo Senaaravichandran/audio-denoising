@@ -1,0 +1,130 @@
+# DCCRN Training Configuration - Comprehensive Training
+# Optimized for Intel i3-7020U with 8GB RAM using ALL 23,075+ audio files
+
+# Model Configuration
+model:
+  name: "dccrn_comprehensive"
+  encoder_layers: 3      # Balanced for performance/quality
+  decoder_layers: 3      
+  lstm_layers: 1         # Single LSTM for memory efficiency
+  lstm_hidden_size: 128  # Good balance for quality
+  kernel_size: [2, 3]
+  stride: [1, 2]
+  use_clstm: true
+  masking_mode: "E"      # Energy-based masking
+  use_cbn: false         # Disable complex batch norm to save memory
+
+# Training Configuration  
+training:
+  batch_size: 4          # Optimized for 8GB RAM
+  num_epochs: 20         # Comprehensive training
+  learning_rate: 0.0005  # Conservative learning rate
+  weight_decay: 0.00001
+  gradient_clip: 5.0
+  
+  # Optimizer
+  optimizer: "adam"
+  beta1: 0.9
+  beta2: 0.999
+  
+  # Learning rate scheduler
+  scheduler: "plateau"
+  patience: 3
+  factor: 0.7
+  min_lr: 0.00001
+  
+  # Loss function
+  loss_function: "si_sdr"
+  loss_weights:
+    si_sdr: 1.0
+    mse: 0.1
+
+# Data Configuration
+data:
+  sample_rate: 16000
+  n_fft: 512            # Good quality with manageable memory
+  hop_length: 256       
+  win_length: 512
+  
+  # Paths
+  clean_dir: "data/clean"
+  noisy_dir: "data/noisy"
+  train_split: 0.85     # 85% for training (19,613 files)
+  val_split: 0.15       # 15% for validation (3,461 files)
+  
+  # Data loading
+  num_workers: 2        # Optimized for i3 dual-core
+  pin_memory: false     # Disabled for 8GB RAM
+  prefetch_factor: 1    
+  
+  # Audio processing
+  segment_length: 2.0   # 2-second segments
+  max_length: 4.0       # Maximum 4 seconds
+  normalize: true
+  
+  # Data augmentation
+  augmentation:
+    enable: true
+    noise_types: ["white", "pink", "brown", "environmental"]
+    noise_range: [0.05, 0.3]
+
+# System Configuration
+system:
+  device: "cpu"         # CPU training for i3
+  mixed_precision: false
+  
+  # Memory management
+  max_memory_usage: 6   # Limit to 6GB of 8GB RAM
+  cleanup_interval: 100 # Clean memory every 100 batches
+  
+  # Storage optimization
+  checkpoint_interval: 1000  # Save every 1000 steps
+  keep_checkpoints: 2       # Keep only 2 recent checkpoints
+  compress_checkpoints: true
+
+# Validation Configuration
+validation:
+  interval: 500         # Validate every 500 steps
+  metrics: ["si_sdr", "pesq", "stoi"]
+  save_best: true
+  early_stopping:
+    enable: true
+    patience: 5
+    min_delta: 0.001
+
+# Output Configuration
+output:
+  checkpoint_dir: "checkpoints"
+  log_dir: "logs" 
+  model_name: "dccrn_comprehensive"
+  save_every_n_epochs: 2
+  
+  # Logging
+  log_level: "INFO"
+  log_interval: 50      # Log every 50 steps
+  tensorboard: false    # Disabled to save space
+  wandb: false          # Disabled
+  
+  # Final model
+  export_onnx: false    # Skip to save space
+  save_traced_model: false
+
+# Performance Configuration
+performance:
+  # CPU optimization for Intel i3
+  torch_threads: 4      
+  mkl_threads: 4
+  omp_threads: 4
+  
+  # Inference optimization
+  jit_compile: false    
+  optimize_inference: true
+  
+  # Distributed training (disabled)
+  distributed: false
+
+# Quality targets
+quality:
+  target_si_sdr: 10.0   # Target 10dB improvement
+  min_improvement: 5.0  # Minimum 5dB improvement
+  max_training_time: 12 # Maximum 12 hours training
