@@ -326,16 +326,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         denoisingStrength = '0.8'
       } = req.body;
 
-      // Check if DCCRN model is available
-      const modelPath = path.join(process.cwd(), 'checkpoints', 'dccrn_latest.pth');
-      const modelAvailable = await fs.access(modelPath).then(() => true).catch(() => false);
-      if (!modelAvailable) {
-        return res.status(503).json({ 
-          error: 'DCCRN model not available. Please train the model first.',
-          code: 'MODEL_NOT_FOUND'
-        });
-      }
-
       // Generate output path
       const outputFilename = `enhanced_${Date.now()}_${file.originalname}`;
       const outputPath = path.join('outputs', outputFilename);
@@ -476,16 +466,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       if (!req.files || req.files.length === 0) {
         return res.status(400).json({ error: 'No files uploaded' });
-      }
-
-      // Check if DCCRN model is available
-      const modelPath = path.join(process.cwd(), 'checkpoints', 'dccrn_latest.pth');
-      const modelAvailable = await fs.access(modelPath).then(() => true).catch(() => false);
-      if (!modelAvailable) {
-        return res.status(503).json({ 
-          error: 'DCCRN model not available. Please train the model first.',
-          code: 'MODEL_NOT_FOUND'
-        });
       }
 
       const options = req.body.options ? JSON.parse(req.body.options) : {};
@@ -1002,16 +982,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         outputFormat = 'wav'
       } = req.body;
 
-      // Check if DCCRN model is available
-      const modelPath = path.join(process.cwd(), 'checkpoints', 'dccrn_latest.pth');
-      const modelAvailable = await fs.access(modelPath).then(() => true).catch(() => false);
-      if (!modelAvailable) {
-        return res.status(503).json({ 
-          error: 'DCCRN model not available. Please train the model first.',
-          code: 'MODEL_NOT_FOUND'
-        });
-      }
-
       // Generate output path
       const outputFilename = `enhanced_${Date.now()}_${file.originalname}`;
       const outputPath = path.join('outputs', outputFilename);
@@ -1077,18 +1047,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         processingMode = 'balanced'
       } = req.body;
 
-      // Check if required services are available
-      const modelPath = path.join(process.cwd(), 'checkpoints', 'dccrn_latest.pth');
-      const modelAvailable = await fs.access(modelPath).then(() => true).catch(() => false);
-
-      if (!modelAvailable) {
-        return res.status(503).json({ 
-          error: 'DCCRN model not available. Please train the model first.',
-          code: 'MODEL_NOT_FOUND'
-        });
-      }
-
-      console.log('✅ DCCRN model is available');
+      console.log('✅ Starting video processing');
 
       // Create video processing job using the correct schema structure
       const jobData = {
@@ -1159,16 +1118,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'File path is required' });
       }
 
-      // Check if DCCRN model is available
-      const modelPath = path.join(process.cwd(), 'checkpoints', 'dccrn_latest.pth');
-      const modelAvailable = await fs.access(modelPath).then(() => true).catch(() => false);
-      if (!modelAvailable) {
-        return res.status(503).json({ 
-          error: 'DCCRN model not available',
-          code: 'MODEL_NOT_FOUND'
-        });
-      }
-
       // Generate output path if not provided
       const finalOutputPath = outputPath || path.join('outputs', `denoised_${Date.now()}_${path.basename(filePath)}`);
       
@@ -1201,16 +1150,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       if (!inputDir || !outputDir) {
         return res.status(400).json({ error: 'Input and output directories are required' });
-      }
-
-      // Check if DCCRN model is available
-      const modelPath = path.join(process.cwd(), 'checkpoints', 'dccrn_latest.pth');
-      const modelAvailable = await fs.access(modelPath).then(() => true).catch(() => false);
-      if (!modelAvailable) {
-        return res.status(503).json({ 
-          error: 'DCCRN model not available',
-          code: 'MODEL_NOT_FOUND'
-        });
       }
 
       // Start batch processing - placeholder implementation

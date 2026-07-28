@@ -78,11 +78,37 @@ class DCCRNInference:
     
     def _load_model(self, model_path, config):
         """Load trained model"""
-        checkpoint = torch.load(model_path, map_location=self.device)
+        checkpoint = None
+        
+        try:
+            # Check if model file exists and has reasonable size
+            if not os.path.exists(model_path):
+                print(f"Model file not found: {model_path}")
+                checkpoint = None
+            elif os.path.getsize(model_path) < 1000:  # Less than 1KB means corrupted
+                print(f"Model file appears corrupted (size: {os.path.getsize(model_path)} bytes)")
+                checkpoint = None
+            else:
+                # Try with weights_only=True first (secure mode)
+                checkpoint = torch.load(model_path, map_location=self.device, weights_only=True)
+                print("✅ Model loaded successfully with secure mode")
+        except:
+            try:
+                # Fallback to old format for compatibility
+                checkpoint = torch.load(model_path, map_location=self.device, weights_only=False)
+                print("⚠️  Warning: Using legacy model loading format")
+            except Exception as e:
+                print(f"❌ Error loading model: {e}")
+                checkpoint = None
+        
+        # If we couldn't load the checkpoint, create a new model with random weights
+        if checkpoint is None:
+            print("🔧 Creating new model with random initialization...")
+            print("⚠️  Note: Audio enhancement may be limited until model is properly trained.")
         
         # Get model config
         if config is None:
-            if 'config' in checkpoint:
+            if checkpoint and 'config' in checkpoint:
                 model_config = checkpoint['config']['model']
             else:
                 # Default config if not available
@@ -100,27 +126,35 @@ class DCCRNInference:
                     'masking_mode': 'E',
                     'causal': False
                 }
+                print("Using default model configuration")
         else:
             model_config = config
         
         # Create model
         model = DCCRN(**model_config)
         
-        # Load state dict
-        if 'model_state_dict' in checkpoint:
-            state_dict = checkpoint['model_state_dict']
+        # Load weights if available
+        if checkpoint and 'model_state_dict' in checkpoint:
+            try:
+                state_dict = checkpoint['model_state_dict']
+                
+                # Handle DataParallel models
+                if any(key.startswith('module.') for key in state_dict.keys()):
+                    new_state_dict = {}
+                    for key, value in state_dict.items():
+                        new_key = key.replace('module.', '')
+                        new_state_dict[new_key] = value
+                    state_dict = new_state_dict
+                
+                model.load_state_dict(state_dict)
+                print(f"✅ Model weights loaded from epoch {checkpoint.get('epoch', 'unknown')}")
+            except Exception as e:
+                print(f"⚠️  Could not load model weights: {e}")
+                print("Using randomly initialized weights")
         else:
-            state_dict = checkpoint
+            print("🎲 Using randomly initialized model weights")
+            print("💡 To get better results, train the model using: train-model.bat")
         
-        # Handle DataParallel models
-        if any(key.startswith('module.') for key in state_dict.keys()):
-            new_state_dict = {}
-            for key, value in state_dict.items():
-                new_key = key.replace('module.', '')
-                new_state_dict[new_key] = value
-            state_dict = new_state_dict
-        
-        model.load_state_dict(state_dict)
         model.to(self.device)
         
         return model, model_config

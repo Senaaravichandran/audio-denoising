@@ -11,7 +11,8 @@ import tempfile
 import torch
 import torchaudio
 from pathlib import Path
-from pydub import AudioSegment
+import librosa
+import soundfile as sf
 
 # Add ML module to path - fix path resolution
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -75,28 +76,35 @@ class DCCRNBalancedService:
     def _convert_to_wav_if_needed(self, input_path: str) -> str:
         """Convert audio file to WAV format if needed"""
         file_ext = Path(input_path).suffix.lower()
-        
+
         if file_ext == '.wav':
             return input_path
-                
+
         try:
             print(f"[PROCESSING] Converting {file_ext} to WAV format...")
-            
-            audio = AudioSegment.from_file(input_path)
-            
+
+            # Load audio with librosa (supports MP3, WAV, etc.)
+            audio_data, sample_rate = librosa.load(input_path, sr=None, mono=False)
+
+            # Create temporary WAV file
             temp_wav = tempfile.NamedTemporaryFile(suffix='.wav', delete=False)
             temp_wav_path = temp_wav.name
             temp_wav.close()
-            
-            audio.export(temp_wav_path, format='wav')
-            
+
+            # Save as WAV using soundfile
+            sf.write(temp_wav_path, audio_data.T if audio_data.ndim > 1 else audio_data, sample_rate)
+
+            # Calculate duration
+            duration = len(audio_data) / sample_rate if audio_data.ndim == 1 else audio_data.shape[1] / sample_rate
+            channels = 1 if audio_data.ndim == 1 else audio_data.shape[0]
+
             print(f"   Converted to: {temp_wav_path}")
-            print(f"   Duration: {len(audio) / 1000:.2f}s")
-            print(f"   Sample rate: {audio.frame_rate} Hz")
-            print(f"   Channels: {audio.channels}")
-            
+            print(f"   Duration: {duration:.2f}s")
+            print(f"   Sample rate: {sample_rate} Hz")
+            print(f"   Channels: {channels}")
+
             return temp_wav_path
-            
+
         except Exception as e:
             raise RuntimeError(f"Failed to convert {file_ext} to WAV: {str(e)}")
     

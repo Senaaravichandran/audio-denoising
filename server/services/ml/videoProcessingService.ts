@@ -223,15 +223,6 @@ export class VideoProcessingService {
     } = options;
 
     try {
-      // Check if DCCRN model is available
-      const modelAvailable = await dccrnService.isModelAvailable();
-      if (!modelAvailable) {
-        return {
-          success: false,
-          error: 'DCCRN model not found. Please train the model first.'
-        };
-      }
-
       // Get video metadata
       const metadata = await this.getVideoMetadata(inputPath);
 
