@@ -413,7 +413,7 @@ export class DCCRNProcessor {
       const dataJson = JSON.stringify(enhancementData);
       
       // Get Groq API key from environment or use the one from groqService
-      const GROQ_API_KEY = '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';
+      const GROQ_API_KEY = process.env.GROQ_API_KEY;
       
       const python = spawn(this.pythonPath, [pythonScript, dataJson], {
         stdio: ['pipe', 'pipe', 'pipe'],
