@@ -149,7 +149,7 @@ export class DCCRNProcessor {
       console.log(`   Process PID: ${child.pid}`);
 
       // Set timeout based on processing mode
-      const timeoutMs = processingMode === 'fast' ? 60000 : 90000; // Fast: 60s, Balanced: 90s
+      const timeoutMs = processingMode === 'fast' ? 120000 : 300000; // Fast: 120s, Balanced: 300s (for slow free tier)
       const timeout = setTimeout(() => {
         console.log(`⚠️ Processing timeout reached (${timeoutMs/1000} seconds) - killing process`);
         child.kill('SIGTERM');

@@ -295,6 +295,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       broadcastJobUpdate(jobId, {
         status: 'failed',
         progress: 90,
+        message: error instanceof Error ? error.message : 'Video processing failed',
         error: error instanceof Error ? error.message : 'Video processing failed'
       });
     }
