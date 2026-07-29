@@ -34,7 +34,7 @@ export class DCCRNProcessor {
 
   constructor() {
     // Use the virtual environment Python executable
-    this.pythonPath = process.env.NODE_ENV === 'production' ? 'python' : 'C:/Users/Senaa/Desktop/Project\'s/SonicPurge/.venv/Scripts/python.exe';
+    this.pythonPath = process.env.NODE_ENV === 'production' ? 'python' : path.join(process.cwd(), '.venv', 'Scripts', 'python.exe');
   }
 
   private getDCCRNServicePath(processingMode: 'fast' | 'balanced' = 'balanced'): string {
