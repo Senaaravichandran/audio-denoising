@@ -36,7 +36,7 @@ export class URLVideoProcessor {
   constructor(dccrnProcessor: any) {
     this.dccrnProcessor = dccrnProcessor;
     // Use the virtual environment Python executable
-    this.pythonPath = 'C:/Users/Senaa/Desktop/Project\'s/SonicPurge/.venv/Scripts/python.exe';
+    this.pythonPath = process.env.NODE_ENV === 'production' ? 'python' : 'C:/Users/Senaa/Desktop/Project\'s/SonicPurge/.venv/Scripts/python.exe';
   }
 
   /**
