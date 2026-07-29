@@ -16,8 +16,6 @@ venv.bak/
 outputs/
 uploads/
 data/
-checkpoints/
-*.pth
 ffmpeg.zip
 *.wav
 *.mp3
